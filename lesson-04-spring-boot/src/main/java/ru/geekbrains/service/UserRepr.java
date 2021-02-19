@@ -22,6 +22,8 @@ public class UserRepr {
     @Email
     private String email;
 
+    private Integer age;
+
     public UserRepr() {
     }
 
@@ -34,6 +36,7 @@ public class UserRepr {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.email = user.getEmail();
+        this.age = user.getAge();
     }
 
     public Long getId() {
@@ -74,5 +77,13 @@ public class UserRepr {
 
     public void setMatchingPassword(String matchingPassword) {
         this.matchingPassword = matchingPassword;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }

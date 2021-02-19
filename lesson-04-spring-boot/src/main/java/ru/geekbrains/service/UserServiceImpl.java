@@ -1,10 +1,14 @@
 package ru.geekbrains.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.persist.User;
 import ru.geekbrains.persist.UserRepository;
+import ru.geekbrains.persist.UserSpecification;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,10 +32,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserRepr> findWithFilter(String usernameFilter) {
-        return userRepository.findUserByUsernameLike(usernameFilter).stream()
-                .map(UserRepr::new)
-                .collect(Collectors.toList());
+    public Page<UserRepr> findWithFilter(String usernameFilter, Integer minAge, Integer maxAge,
+                                         Integer page, Integer size) {
+        Specification<User> spec = Specification.where(null);
+        if (usernameFilter != null && !usernameFilter.isBlank()) {
+            spec = spec.and(UserSpecification.usernameLike(usernameFilter));
+        }
+        if (minAge != null) {
+            spec = spec.and(UserSpecification.minAge(minAge));
+        }
+        if (maxAge != null) {
+            spec = spec.and(UserSpecification.maxAge(maxAge));
+        }
+        return userRepository.findAll(spec, PageRequest.of(page, size))
+                .map(UserRepr::new);
     }
 
     @Transactional
