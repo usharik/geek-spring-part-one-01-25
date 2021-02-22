@@ -42,15 +42,9 @@
             <table class="table table-bordered my-2">
                 <thead>
                 <tr>
-                    <th scope="col">Id
-                        <a href="#"><i class="fa fa-sort-down"></i></a>
-                    </th>
-                    <th scope="col">Username
-                        <a href="#"><i class="fa fa-sort-down"></i></a>
-                    </th>
-                    <th scope="col">Age
-                        <a href="#"><i class="fa fa-sort-down"></i></a>
-                    </th>
+                    <th scope="col" th:replace="fragments/sort_header :: sort_header ('Id', 'id')"/>
+                    <th scope="col" th:replace="fragments/sort_header :: sort_header ('Username', 'username')"/>
+                    <th scope="col" th:replace="fragments/sort_header :: sort_header ('Age', 'age')"/>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -87,7 +81,7 @@
                         class="page-item">
                         <a th:text="${num}"
                            th:href="@{/user(page=${num}, size=${users.size},
-                           usernameFilter=${param.usernameFilter}, minAge=${param.minAge}, maxAge=${param.maxAge})}"
+                           usernameFilter=${param.usernameFilter}, minAge=${param.minAge}, maxAge=${param.maxAge}, sortField=${param.sortField})}"
                            class="page-link">1 <span th:if="${num == users.number + 1}" class="sr-only">(current)</span></a>
                     </li>
 
