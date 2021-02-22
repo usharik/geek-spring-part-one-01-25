@@ -1,6 +1,7 @@
 package ru.geekbrains.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import ru.geekbrains.service.UserRepr;
 import ru.geekbrains.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,6 +38,25 @@ public class UserResource {
                 .orElseThrow(NotFoundException::new);
         userRepr.setPassword(null);
         return userRepr;
+    }
+
+    @GetMapping("filter")
+    public Page<UserRepr> listPage(
+                           @RequestParam("usernameFilter") Optional<String> usernameFilter,
+                           @RequestParam("ageMinFilter") Optional<Integer> ageMinFilter,
+                           @RequestParam("ageMaxFilter") Optional<Integer> ageMaxFilter,
+                           @RequestParam("page") Optional<Integer> page,
+                           @RequestParam("size") Optional<Integer> size,
+                           @RequestParam("sortField") Optional<String> sortField) {
+
+        return userService.findWithFilter(
+                usernameFilter.orElse(null),
+                ageMinFilter.orElse(null),
+                ageMaxFilter.orElse(null),
+                page.orElse(1) - 1,
+                size.orElse(3),
+                sortField.orElse(null)
+        );
     }
 
     @PostMapping(consumes = "application/json")
