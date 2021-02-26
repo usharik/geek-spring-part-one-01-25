@@ -1,5 +1,7 @@
 package ru.geekbrains.rest;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// http://localhost:8080/spring-mvc-app/swagger-ui/index.html
+// http://localhost:8080/spring-mvc-app/v3/api-docs/
+
+// https://www.baeldung.com/spring-rest-openapi-documentation
+
+@Tag(name = "User resource API", description = "API to manipulate User resource ...")
+@CrossOrigin(origins = "http://localhost:63342")
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserResource {
@@ -45,7 +54,7 @@ public class UserResource {
                            @RequestParam("usernameFilter") Optional<String> usernameFilter,
                            @RequestParam("ageMinFilter") Optional<Integer> ageMinFilter,
                            @RequestParam("ageMaxFilter") Optional<Integer> ageMaxFilter,
-                           @RequestParam("page") Optional<Integer> page,
+                           @Parameter(example = "1") @RequestParam("page") Optional<Integer> page,
                            @RequestParam("size") Optional<Integer> size,
                            @RequestParam("sortField") Optional<String> sortField) {
 
