@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.persist.User;
@@ -20,9 +21,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -64,6 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(UserRepr user) {
         User userToSave = new User(user);
+        userToSave.setPassword(passwordEncoder.encode(userToSave.getPassword()));
         userRepository.save(userToSave);
         if (user.getId() == null) {
             user.setId(userToSave.getId());

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.geekbrains.persist.RoleRepository;
 import ru.geekbrains.service.UserRepr;
 import ru.geekbrains.service.UserService;
 
@@ -24,9 +25,12 @@ public class UserController {
 
     private final UserService userService;
 
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping
@@ -55,6 +59,7 @@ public class UserController {
     public String editPage(@PathVariable("id") Long id, Model model) {
         logger.info("Edit page for id {} requested", id);
 
+        model.addAttribute("roles", roleRepository.findAll());
         model.addAttribute("user", userService.findById(id)
                 .orElseThrow(NotFoundException::new));
         return "user_form";
@@ -64,6 +69,7 @@ public class UserController {
     public String update(@Valid @ModelAttribute("user") UserRepr user, BindingResult result, Model model) {
         logger.info("Update endpoint requested");
 
+        model.addAttribute("roles", roleRepository.findAll());
         if (result.hasErrors()) {
             return "user_form";
         }
@@ -81,6 +87,7 @@ public class UserController {
     public String create(Model model) {
         logger.info("Create new user request");
 
+        model.addAttribute("roles", roleRepository.findAll());
         model.addAttribute("user", new UserRepr());
         return "user_form";
     }
