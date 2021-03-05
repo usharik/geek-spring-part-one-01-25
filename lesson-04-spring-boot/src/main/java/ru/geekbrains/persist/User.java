@@ -7,6 +7,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@NamedQuery(name = "usersWithRoles",
+        query = "select new ru.geekbrains.persist.UserRole(u.username, r.name) " +
+                "from User u" +
+                " left join u.roles r")
 public class User {
 
     @Id

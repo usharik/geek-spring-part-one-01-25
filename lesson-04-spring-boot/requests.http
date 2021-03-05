@@ -3,11 +3,12 @@ GET http://localhost:8080/spring-mvc-app/api/v1/user/all
 ###
 
 GET http://localhost:8080/spring-mvc-app/api/v1/user/1
-
+Authorization: Basic admin 111
 ###
 
 POST http://localhost:8080/spring-mvc-app/api/v1/user
 Content-Type: application/json
+Authorization: Basic admin 111
 
 {
     "username": "user88",
